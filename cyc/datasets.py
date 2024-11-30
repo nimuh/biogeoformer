@@ -4,6 +4,10 @@ from torch.utils.data import Dataset
 from pandas import read_csv, DataFrame
 from numpy import unique
 from pickle import dump, HIGHEST_PROTOCOL
+
+
+
+
 """
 For loading dataframes containing protein sequences with a target ID
 This serves as a general dataset for protein sequence classification
