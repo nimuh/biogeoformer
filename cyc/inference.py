@@ -1,6 +1,8 @@
 
 import argparse
-from . import util, model
+from cyc import util, model
+import torch
+import pickle
 
 def main():
     """
@@ -18,7 +20,7 @@ def main():
     args = parser.parse_args()
 
     # Load label mapping
-    with open('../data/ko_model_id_map.pickle', 'rb') as f:
+    with open('data/ko_model_id_map.pickle', 'rb') as f:
         mapper = pickle.load(f)
 
     # Run inference
@@ -30,8 +32,8 @@ def main():
     )
 
     # Print predictions
-    for pred in predictions:
-        print(pred)
+    #for pred in predictions:
+    #    print(pred)
 
 if __name__ == '__main__':
     main()

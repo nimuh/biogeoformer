@@ -4,6 +4,8 @@
 
 from transformers import EsmForSequenceClassification
 import torch
+from util import fasta_to_dataset
+from tqdm import tqdm
 
 def load_model(model_path, device="cuda:0" if torch.cuda.is_available() else "cpu"):
     """
@@ -38,23 +40,34 @@ def predict_fasta(model_path, fasta_file, mapper, device="cuda:0" if torch.cuda.
     model = load_model(model_path, device)
     model.eval()
     
-    # Convert FASTA to dataset
+    # Convert FASTA to dataset and create dataloader
     dataset = fasta_to_dataset(fasta_file, mapper)
-    
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
+
     # Perform inference
     predictions = []
-    with torch.no_grad():
-        for sample in dataset:
+    with torch.no_grad():        
+        for sample in tqdm(dataloader):
             # Add batch dimension and move to device
-            inputs = sample['input_ids'].unsqueeze(0).to(device)
-            
-            # Get model outputs
+            inputs = sample['input_ids'].squeeze(0).to(device)
+
+            # Get model outputs 
             outputs = model(inputs)
             
             # Get predicted class
             pred = torch.argmax(outputs.logits, dim=-1)
-            pred_label = dataset.id2label[pred.item()]
+            pred_label = dataset.label_dict[pred.item()]
+            #print(pred_label)
             predictions.append(pred_label)
+    
+
+    df = dataset.dataframe
+    df['prediction'] = predictions
+
+    df.to_csv('data/test_annot.csv')
+    print(df)
+
+    #print(predictions)
             
     return predictions
 

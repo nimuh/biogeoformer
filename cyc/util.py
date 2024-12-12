@@ -1,9 +1,8 @@
 
 
 
-
 from transformers import EsmTokenizer
-from .datasets import ProteinDataset
+from cyc.datasets import ProteinDataset
 
 
 def fasta_to_dataset(fasta_file, mapper):
