@@ -4,6 +4,9 @@ from cyc import util, model
 import torch
 import pickle
 
+# TODO
+# change to include model versions
+
 def main():
     """
     Command line interface for performing inference on protein sequences in a FASTA file
@@ -30,7 +33,7 @@ def main():
         mapper=mapper,
         device=args.device
     )
-
+    
     # Print predictions
     #for pred in predictions:
     #    print(pred)
