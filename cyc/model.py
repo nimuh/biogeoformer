@@ -7,7 +7,10 @@ import torch
 from util import fasta_to_dataset
 from tqdm import tqdm
 
-def load_model(model_path, device="cuda:0" if torch.cuda.is_available() else "cpu"):
+
+
+
+def load_model(sim, device="cuda:0" if torch.cuda.is_available() else "cpu"):
     """
     Load an ESM sequence classification model from a given path
     
@@ -18,12 +21,17 @@ def load_model(model_path, device="cuda:0" if torch.cuda.is_available() else "cp
     Returns:
         model: Loaded ESM model on specified device
     """
+    model_path = f'cycformer/models/cyc_{sim}'
+    print(f'\nLoading model -> {model_path} for identity at {sim}')
     model = EsmForSequenceClassification.from_pretrained(model_path)
     model.to(device)
     return model
 
 
-def predict_fasta(model_path, fasta_file, mapper, device="cuda:0" if torch.cuda.is_available() else "cpu"):
+
+# TODO
+# change batch size to allow for larger batches
+def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.cuda.is_available() else "cpu"):
     """
     Load a model and perform inference on sequences in a FASTA file
     
@@ -36,8 +44,12 @@ def predict_fasta(model_path, fasta_file, mapper, device="cuda:0" if torch.cuda.
     Returns:
         list: List of predicted labels for sequences
     """
+
     # Load the model
-    model = load_model(model_path, device)
+    model = load_model(sim, device)
+    temperature = torch.load(f'cycformer/models/final_temperatures/optimal_temperature_cyc_{sim}.pt')
+    #print(temperature)
+    #exit()
     model.eval()
     
     # Convert FASTA to dataset and create dataloader
@@ -46,6 +58,7 @@ def predict_fasta(model_path, fasta_file, mapper, device="cuda:0" if torch.cuda.
 
     # Perform inference
     predictions = []
+    confidences = []
     with torch.no_grad():        
         for sample in tqdm(dataloader):
             # Add batch dimension and move to device
@@ -56,19 +69,19 @@ def predict_fasta(model_path, fasta_file, mapper, device="cuda:0" if torch.cuda.
             
             # Get predicted class
             pred = torch.argmax(outputs.logits, dim=-1)
+            conf = torch.nn.functional.softmax(outputs.logits / temperature, dim=-1)[:, pred].item()
             pred_label = dataset.label_dict[pred.item()]
-            #print(pred_label)
+            #pred_conf = dataset.label_dict[torch.argmax(conf).item()]
             predictions.append(pred_label)
+            confidences.append(conf)
     
 
     df = dataset.dataframe
     df['prediction'] = predictions
-
-    df.to_csv('data/test_annot.csv')
+    df['confidence'] = confidences
+    df.to_csv(annot_file)
     print(df)
-
-    #print(predictions)
-            
+           
     return predictions
 
 
