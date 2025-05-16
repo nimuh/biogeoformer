@@ -47,9 +47,7 @@
     "33": "LABEL_33",
     "34": "LABEL_34",
     "35": "LABEL_35",
-    "36": "LABEL_36",
-    "37": "LABEL_37",
-    "38": "LABEL_38"
+    "36": "LABEL_36"
   },
   "initializer_range": 0.02,
   "intermediate_size": 1280,
@@ -86,8 +84,6 @@
     "LABEL_34": 34,
     "LABEL_35": 35,
     "LABEL_36": 36,
-    "LABEL_37": 37,
-    "LABEL_38": 38,
     "LABEL_4": 4,
     "LABEL_5": 5,
     "LABEL_6": 6,
@@ -106,7 +102,7 @@
   "problem_type": "single_label_classification",
   "token_dropout": true,
   "torch_dtype": "float32",
-  "transformers_version": "4.41.0",
+  "transformers_version": "4.47.0",
   "use_cache": true,
   "vocab_list": null,
   "vocab_size": 33
