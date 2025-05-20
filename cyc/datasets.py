@@ -39,9 +39,26 @@ class ProteinDataset(Dataset):
             print("loading file: ", csv_file)
             data = read_csv(csv_file)
 
+        # Filter sequences to be at most 1024 characters in length
+        if seq_column in data.columns:
+            # Calculate sequence lengths
+            data['seq_length'] = data[seq_column].str.len()
+            
+            # Filter sequences that are at most 1024 characters
+            original_count = len(data)
+            data = data[data['seq_length'] <= 1024]
+            filtered_count = len(data)
+            
+            # Drop the temporary sequence length column
+            data = data.drop('seq_length', axis=1).reset_index()
+            
+            if original_count > filtered_count:
+                print(f"Filtered out {original_count - filtered_count} sequences longer than 1024 characters")
+                print(f"Remaining sequences: {filtered_count}")
+
         self.dataframe = data
 
-        # First do mean sampling across all classes
+        # First do median sampling across all classes
         if nsamples == -1:
             mean_samples = int(data.groupby(label_column).size().median())
             print(f"median sampling training data::: {mean_samples} per {label_column}")
@@ -61,6 +78,7 @@ class ProteinDataset(Dataset):
             )
         print("done.")
 
+        print(self.dataframe)
         self.label_dict = mapper
 
         if label_column is not None:
