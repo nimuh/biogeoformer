@@ -47,9 +47,7 @@ def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.
 
     # Load the model
     model = load_model(sim, device)
-    temperature = torch.load(f'cycformer/models/final_temperatures/optimal_temperature_cyc_{sim}.pt')
-    #print(temperature)
-    #exit()
+    temperature = torch.load(f'cycformer/models/temp_scaling/optimal_temperature_classwise_cyc{sim}.pt').to(device)
     model.eval()
     
     # Convert FASTA to dataset and create dataloader
@@ -71,7 +69,6 @@ def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.
             pred = torch.argmax(outputs.logits, dim=-1)
             conf = torch.nn.functional.softmax(outputs.logits / temperature, dim=-1)[:, pred].item()
             pred_label = dataset.label_dict[pred.item()]
-            #pred_conf = dataset.label_dict[torch.argmax(conf).item()]
             predictions.append(pred_label)
             confidences.append(conf)
     

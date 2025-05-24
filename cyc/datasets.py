@@ -144,7 +144,7 @@ class ProteinDataset(Dataset):
     def __getitem__(self, idx):
         sample = self.tokenizer(
             self.seqs[idx],
-            #return_tensors='pt',
+            return_tensors='pt',
             padding=True,
             truncation=True,
         )
