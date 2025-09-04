@@ -27,7 +27,7 @@ def main():
     args = parser.parse_args()
 
     # Load label mapping
-    with open(f'cycformer/data/cycle_maps/cyc_label_id_map_{args.sim}.pickle', 'rb') as f:
+    with open(f'cycformer/models/final_models/cyc_id_maps/cyc_label_id_map_{args.sim}.pickle', 'rb') as f:
         mapper = pickle.load(f)
         print(mapper)
 

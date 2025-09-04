@@ -22,7 +22,7 @@ def load_model(sim, device="cuda:0" if torch.cuda.is_available() else "cpu"):
     Returns:
         model: Loaded ESM model on specified device
     """
-    model_path = f'cycformer/models/cyc_{sim}'
+    model_path = f'cycformer/models/final_models/cyc_{sim}'
     print(f'\nLoading model -> {model_path} for identity at {sim}')
     model = EsmForSequenceClassification.from_pretrained(model_path)
     model.to(device)
