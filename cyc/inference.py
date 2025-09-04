@@ -29,6 +29,7 @@ def main():
     # Load label mapping
     with open(f'cycformer/data/cycle_maps/cyc_label_id_map_{args.sim}.pickle', 'rb') as f:
         mapper = pickle.load(f)
+        print(mapper)
 
     # Run inference
     predictions = model.predict_fasta(

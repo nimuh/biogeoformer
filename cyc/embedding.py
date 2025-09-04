@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 import os
 
 
-data_path = '../artifacts/selected_train'
+data_path = '../artifacts/selected_test'
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
-SAMPLE_COUNT = 50000
+SAMPLE_COUNT = 100000
 
 
 # TODO
@@ -25,7 +25,7 @@ def tsne(sim):
 
     model = load_model(sim=sim)
     model.eval()
-    data_file_path = data_path + f'/selected_train_{sim}.csv'
+    data_file_path = data_path + f'/selected_test_{sim}.csv'
     tokenizer = EsmTokenizer.from_pretrained('facebook/esm2_t6_8M_UR50D')
     
     with open(f'cycformer/data/cycle_maps/cyc_label_id_map_{sim}.pickle', 'rb') as f:
@@ -41,7 +41,8 @@ def tsne(sim):
     )
 
     dataloader = torch.utils.data.DataLoader(protein_data, batch_size=1, shuffle=True)
-
+    pathways_map = pd.read_csv('cycformer/pathways_df.csv')
+    pathways_dict = dict(zip(pathways_map['biogeo_cycle'], pathways_map['long_name']))
     embeds = torch.zeros((len(dataloader), 320))
     labels = []
 
@@ -50,7 +51,11 @@ def tsne(sim):
     #print(f'Iterating through {c} samples')
     for i, sample in enumerate(tqdm(dataloader)):
         inputs = sample['input_ids'][0].to(device)
-        labels.append(protein_data.id2label[sample['label'].numpy()[0]])
+        if protein_data.id2label[sample['label'].numpy()[0]] == 'nocycle':
+            continue
+        label = pathways_dict[protein_data.id2label[sample['label'].numpy()[0]]]
+        
+        labels.append(label)
         outputs = model(inputs, return_dict=True, output_hidden_states=True)
         h = outputs.hidden_states[-1]
 
@@ -67,8 +72,8 @@ def tsne(sim):
     embeds_np = embeds[:c, :].numpy()
     
     # Perform TSNE dimensionality reduction
-    pe = 50
-    lr = 1000
+    pe = 30
+    lr = 'auto'
     n_iter = 1000
     tsne = TSNE(n_components=2,
                 perplexity=pe,
@@ -89,13 +94,15 @@ def tsne(sim):
     # Plot using pandas/matplotlib
     plt.figure(figsize=(15, 9), dpi=300)
     
-
-    # Create a consistent color mapping for labels
-    # This ensures the same label gets the same color across different function calls
+    # Ensure each label gets a unique color
     unique_labels = sorted(set(labels))
-    colors = plt.cm.tab20(np.linspace(0, 1, len(unique_labels)))
-    color_map = {label: colors[i] for i, label in enumerate(unique_labels)}
-    
+    num_labels = len(unique_labels)
+    # Use a colormap with enough distinct colors
+    cmap = plt.get_cmap('tab20' if num_labels <= 20 else 'hsv')
+    colors = [cmap(i / num_labels) for i in range(num_labels)]
+    color_map = {label: tuple(colors[i]) for i, label in enumerate(unique_labels)}
+
+    """
     # Save the color mapping to a file for consistency across runs
     color_map_file = f'cycformer/data/color_map.pkl'
     os.makedirs(os.path.dirname(color_map_file), exist_ok=True)
@@ -119,7 +126,9 @@ def tsne(sim):
     # Save the updated color map
     with open(color_map_file, 'wb') as f:
         pickle.dump(color_map, f)
-        
+    """
+    
+    print(df)
     # Plot points colored by label
     for label in set(labels):
         mask = df['label'] == label
@@ -131,13 +140,13 @@ def tsne(sim):
 
     date_time = datetime.datetime.now()
     time_stamp = str(date_time).split(' ')[0]
-    print(f' Saving to : tsne_plot_c={c}_sim={sim}_pe{pe}_lr{lr}_niter{n_iter}_{time_stamp}.png')
-    plt.savefig(f'tsne_plot_c={c}_sim={sim}_pe{pe}_lr{lr}_niter{n_iter}_{time_stamp}.png')
+    print(f' Saving to : test_tsne_plot_c={c}_sim={sim}_pe{pe}_lr{lr}_niter{n_iter}_{time_stamp}.png')
+    plt.savefig(f'test_tsne_plot_c={c}_sim={sim}_pe{pe}_lr{lr}_niter{n_iter}_{time_stamp}.png')
     plt.close()
 
         
         
-tsne(sim=90)
+tsne(sim=80)
 
 
 

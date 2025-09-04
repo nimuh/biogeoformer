@@ -94,9 +94,9 @@ class ProteinDataset(Dataset):
         self.id2label = dict([(k, v) for v, k in self.label_dict.items()])
 
         if save_id_map:
-            if not os.path.exists(f"cyc_id_maps/cyc_label_id_map_{sim}.pickle"):
-                with open(f"cyc_id_maps/cyc_label_id_map_{sim}.pickle", "wb") as f:
-                    dump(self.id2label, f, HIGHEST_PROTOCOL)
+            #if not os.path.exists(f"cyc_id_maps/cyc_label_id_map_{sim}.pickle"):
+            with open(f"cyc_id_maps/cyc_label_id_map_{sim}.pickle", "wb") as f:
+                dump(self.id2label, f, HIGHEST_PROTOCOL)
 
         self.seqs = data[seq_column]
 

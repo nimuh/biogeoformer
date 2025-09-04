@@ -5,6 +5,7 @@
 from transformers import EsmForSequenceClassification
 import torch
 from util import fasta_to_dataset
+import pickle
 from tqdm import tqdm
 
 
@@ -28,7 +29,6 @@ def load_model(sim, device="cuda:0" if torch.cuda.is_available() else "cpu"):
     return model
 
 
-
 # TODO
 # change batch size to allow for larger batches
 def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.cuda.is_available() else "cpu"):
@@ -47,7 +47,7 @@ def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.
 
     # Load the model
     model = load_model(sim, device)
-    temperature = torch.load(f'cycformer/models/temp_scaling/optimal_temperature_classwise_cyc{sim}.pt').to(device)
+    temperature = torch.load(f'cycformer/models/final_temps/cyc{sim}_temp.pt')
     model.eval()
     
     # Convert FASTA to dataset and create dataloader
@@ -81,4 +81,76 @@ def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.
            
     return predictions
 
+
+
+# TODO
+# define a function for ensembling all sim models for inference
+def predict_fasta_ensemble(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.cuda.is_available() else "cpu"):
+    """
+    Load ALL models and perform inference on sequences in a FASTA file
+    
+    Args:
+        model_path (str): Path to the model checkpoint/folder
+        fasta_file (str): Path to input FASTA file
+        mapper (dict): Dictionary mapping labels to indices
+        device (str): Device to run inference on
+        
+    Returns:
+        list: List of predicted labels for sequences
+    """
+
+
+    # load in all models for each similarity threshold
+    sims = [40, 50, 60, 70, 80, 90]
+    models = [load_model(sim, device) for sim in sims]
+
+    # load all the cycle maps for each model
+    cycle_id_maps = []
+    for sim in sims:
+        f = open(f'cycformer/data/cycle_maps/cyc_label_id_map_{sim}.pickle', 'rb')
+        cycle_id_maps.append(pickle.load(f))
+
+    # ensure each model is set for inference
+    for model in models:
+        model.eval()
+
+    
+    # Convert FASTA to dataset and create dataloader
+    dataset = fasta_to_dataset(fasta_file, mapper)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
+
+    # Perform inference
+    predictions = []
+    confidences = []
+    with torch.no_grad():        
+        for sample in tqdm(dataloader):
+            
+            # Add batch dimension and move to device
+            inputs = sample['input_ids'].squeeze(0).to(device)
+
+            # Get model outputs 
+            choices = torch.stack([model(inputs).logits for model in models]).squeeze(1)
+
+            # Get predicted class
+            preds = torch.argmax(choices, dim=-1).detach().cpu().numpy()
+            #print(preds)
+            
+            labeled_preds = []
+            for i in range(len(cycle_id_maps)):
+                labeled_preds.append(cycle_id_maps[i][preds[i]])
+            
+            #print(labeled_preds)
+
+            #pred_label = dataset.label_dict[pred.item()]
+            predictions.append(labeled_preds)
+            #confidences.append(conf)
+    
+
+    df = dataset.dataframe
+    df['prediction'] = predictions
+    df['confidence'] = confidences
+    df.to_csv(annot_file)
+    print(df)
+           
+    return predictions
 
