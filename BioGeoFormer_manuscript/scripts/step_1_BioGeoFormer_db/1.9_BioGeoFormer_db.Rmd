@@ -1,0 +1,392 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(Biostrings)
+library(stringr)
+library(phylotools)
+library(dplyr)
+library(reticulate)
+library(flextable)
+library(officer)
+```
+
+
+
+
+
+```{r}
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+getwd()
+
+
+grouped_metadata_mcycdb <- read.csv("../../cycdb_csv/metadata_with_pathways/grouped_metadata_multigroups_mcycdb.csv")
+grouped_metadata_scycdb <- read.csv("../../cycdb_csv/metadata_with_pathways/grouped_metadata_multigroups_scycdb.csv")
+grouped_metadata_ncycdb <- read.csv("../../cycdb_csv/metadata_with_pathways/grouped_metadata_multigroups_ncyc.csv")
+grouped_metadata_pcycdb <- read.csv("../../cycdb_csv/metadata_with_pathways/grouped_metadata_multigroups_pcycdb.csv")
+
+
+combined_grouped_metadata <- rbind(grouped_metadata_mcycdb, grouped_metadata_ncycdb, grouped_metadata_scycdb, grouped_metadata_pcycdb)
+
+combined_grouped_metadata <- select(combined_grouped_metadata, -X)
+
+gene2pathway <- combined_grouped_metadata %>% select(gene, cycle, cycle2, cycle3)
+gene2pathway <- unique(gene2pathway)
+
+write.csv(combined_grouped_metadata, "../../cycdb_csv/metadata_with_pathways/combined_grouped_metadata.csv", row.names = FALSE)
+write.csv(gene2pathway, "../../cycdb_csv/metadata_with_pathways/gene2pathwaymap.csv", row.names = FALSE)
+
+combined_grouped_metadata <- read.csv("../../cycdb_csv/metadata_with_pathways/combined_grouped_metadata.csv")
+
+```
+
+
+```{r}
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+getwd()
+metadata_combined <- read.csv("../../cycdb_csv/metadata_with_pathways/combined_grouped_metadata.csv")
+
+
+
+```
+
+
+```{r}
+
+sequences <- read.fasta("../../combined_cycdb/combined100.faa")
+
+colnames(sequences) <- c("id", "sequence")
+
+
+merged_met_seq <- merge(x = metadata_combined, y = sequences, by = "id")
+
+
+``` 
+
+
+```{r}
+dups_merged_met_seq <- merged_met_seq %>%
+  group_by(id) %>%
+  filter(n() > 1) %>%
+  arrange(id)
+
+
+clean_query_data_ml <- merged_met_seq %>%
+  group_by(id) %>%
+  filter(n() == 1) %>%
+  ungroup()
+
+
+```
+
+
+
+```{r}
+dup_summary <- dups_merged_met_seq %>%
+  group_by(id) %>%
+  summarise(
+    n_genes  = n_distinct(gene),
+    n_cycles = n_distinct(c(cycle, cycle2, cycle3)[c(cycle, cycle2, cycle3) != "nocycle"]),
+    .groups = "drop"
+  )
+```
+
+```{r}
+# A: multiple genes -> drop
+ids_multigene <- dup_summary %>%
+  filter(n_genes > 1) %>%
+  select(id)  
+
+# B: one gene, multiple cycles -> fix later
+ids_multicycle <- dup_summary %>%
+  filter(n_genes == 1, n_cycles > 1) %>%
+  select(id)
+
+```
+
+```{r}
+ids_bad <- bind_rows(ids_multigene, ids_multicycle)
+
+clean_data <- anti_join(merged_met_seq, ids_bad, by = "id")
+
+```
+
+```{r}
+dup_multicycle <- inner_join(merged_met_seq, ids_multicycle, by = "id")
+```
+
+
+```{r}
+library(dplyr)
+library(purrr)
+
+reconcile_multicycle <- function(multicycle_df) {
+  multicycle_df %>%
+    group_by(id) %>%
+    summarise(
+      gene     = dplyr::first(gene),
+      database = dplyr::first(database),
+      sequence = dplyr::first(sequence),
+      cycles_list = list(unique(c(
+        cycle  [!is.na(cycle)  & cycle  != "nocycle"],
+        cycle2 [!is.na(cycle2) & cycle2 != "nocycle"],
+        cycle3 [!is.na(cycle3) & cycle3 != "nocycle"]
+      ))),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      cycle  = map_chr(cycles_list, ~ if (length(.x) >= 1) .x[[1]] else "nocycle"),
+      cycle2 = map_chr(cycles_list, ~ if (length(.x) >= 2) .x[[2]] else "nocycle"),
+      cycle3 = map_chr(cycles_list, ~ if (length(.x) >= 3) .x[[3]] else "nocycle")
+    ) %>%
+    select(id, gene, database, cycle, cycle2, cycle3, sequence)
+}
+
+```
+
+
+```{r}
+fixed_multicycle <- reconcile_multicycle(dup_multicycle)
+
+```
+
+```{r}
+dups_fixed_multicycle <- fixed_multicycle %>%
+  group_by(id) %>%
+  filter(n() > 1) %>%
+  arrange(id)
+```
+
+```{r}
+combined_data <- bind_rows(clean_data, fixed_multicycle) %>%
+  distinct()
+```
+
+```{r}
+dups_fixed_combined_data <- combined_data %>%
+  group_by(id) %>%
+  filter(n() > 1) %>%
+  arrange(id)
+```
+
+```{r}
+combined_data <- combined_data %>%
+  distinct(id, .keep_all = TRUE)
+```
+
+```{r}
+dups_fixed_combined_data <- combined_data %>%
+  group_by(id) %>%
+  filter(n() > 1) %>%
+  arrange(id)
+```
+
+
+```{r}
+combined_data_test_ws <- combined_data %>%
+  mutate(id = trimws(id))
+
+dups_fixed_whitespace_check <- combined_data_test_ws %>%
+  group_by(id) %>%
+  filter(n() > 1) %>%
+  arrange(id)
+
+```
+
+
+
+```{r} 
+#df$combined <- ifelse(df$column2 == "nocycle", df$column1, paste(df$column1, df$column2, sep = ","))
+
+combined_data$combined_cycle <- ifelse(combined_data$cycle2 == "nocycle", combined_data$cycle, paste(combined_data$cycle, combined_data$cycle2, sep = ","))
+```
+
+
+```{r}
+
+unique(combined_data$cycle3)
+
+```
+
+
+
+
+```{r}   
+
+df_count <- combined_data %>%
+  group_by(cycle) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+# Convert Class into a factor with levels ordered by Count
+df_count$cycle <- factor(df_count$cycle, levels = df_count$cycle)
+
+# Create the plot
+ggplot(df_count, aes(x = cycle, y = Count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() + # This makes the plot horizontal
+  theme_minimal() +
+  labs(x = "Class", y = "Count", title = "Count of Classes in Descending Order")
+
+
+
+``` 
+
+
+```{r}
+df_count <- combined_data %>%
+  group_by(combined_cycle) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+# Convert Class into a factor with levels ordered by Count
+df_count$cycle <- factor(df_count$combined_cycle, levels = df_count$combined_cycle)
+
+# Create the plot
+ggplot(df_count, aes(x = cycle, y = Count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() + # This makes the plot horizontal
+  theme_minimal() +
+  labs(x = "Class", y = "Count", title = "Count of Classes in Descending Order")
+
+
+```
+
+
+
+
+
+
+```{r}
+merged_met_seq_sc <- filter(combined_data, cycle != "nocycle", cycle2 == "nocycle", combined_cycle != "aom")
+
+merged_met_seq_cenaom <- filter(combined_data, combined_cycle == "cenmetpat,aom")
+
+merged_met_seq_sc <- rbind(merged_met_seq_sc, merged_met_seq_cenaom)
+
+```
+
+
+```{r}
+library(dplyr)
+
+# Identify genes that fall into more than one cycle
+genes_multiple_cycles <- merged_met_seq_sc %>%
+  select(gene, combined_cycle) %>%
+  distinct() %>%
+  group_by(gene) %>%
+  summarise(n_cycles = n_distinct(combined_cycle), .groups = "drop") %>%
+  filter(n_cycles > 1) %>%
+  pull(gene)  # this makes it a character vector of gene names
+
+# Step 2: Remove rows with those genes
+merged_met_seq_sc <- merged_met_seq_sc %>%
+  filter(!gene %in% genes_multiple_cycles)
+```
+
+```{r}
+genes_multiple_cycles <- merged_met_seq_sc %>%
+  select(gene, combined_cycle) %>%
+  distinct() %>%
+  group_by(gene) %>%
+  summarise(n_cycles = n_distinct(combined_cycle), .groups = "drop") %>%
+  filter(n_cycles > 1) %>%
+  pull(gene)
+```
+
+
+
+
+```{r}
+df_count <- merged_met_seq_sc %>%
+  group_by(combined_cycle) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+# Convert Class into a factor with levels ordered by Count
+df_count$cycle <- factor(df_count$combined_cycle, levels = df_count$combined_cycle)
+
+# Create the plot
+ggplot(df_count, aes(x = cycle, y = Count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() + # This makes the plot horizontal
+  theme_minimal() +
+  labs(x = "Class", y = "Count", title = "Count of Classes in Descending Order")
+
+
+```
+
+
+```{r}
+
+# Create the gene count table
+gene_cycle_counts <- merged_met_seq_sc %>%
+  group_by(combined_cycle, gene) %>%
+  summarise(gene_count = n(), .groups = "drop") %>%
+  arrange(combined_cycle, desc(gene_count))
+
+# Make a flextable
+ft <- flextable(gene_cycle_counts)
+ft <- autofit(ft)
+
+# Export to Word document
+doc <- read_docx() %>%
+  body_add_par("Supplementary Table: Gene counts per combined cycle class", style = "heading 1") %>%
+  body_add_flextable(ft)
+
+# Save the Word document
+print(doc, target = "../../BioGeoFormer_db/BioGeoFormer_db_overview.docx")
+
+write.csv(gene_cycle_counts, "../../BioGeoFormer_db/BioGeoFormer_db_overview.csv", row.names = FALSE)
+
+
+
+```
+
+
+```{r}
+dups_merged_gene_counts<- gene_cycle_counts %>%
+  group_by(gene) %>%
+  filter(n() > 1) %>%
+  arrange(gene)
+```
+
+
+```{r}
+dups_merged_met_seq_sc<- merged_met_seq_sc %>%
+  group_by(id) %>%
+  filter(n() > 1) %>%
+  arrange(id)
+```
+
+
+
+```{r}
+merged_met_seq_sc <- select(merged_met_seq_sc, id, gene, combined_cycle, sequence)
+
+colnames(merged_met_seq_sc) <- c('id', 'gene', 'cycle', 'sequence')
+  
+  
+write.csv(merged_met_seq_sc, "../../BioGeoFormer_db/BioGeoFormer_db.csv", row.names = F)
+
+```
+
+
+
+
+
+
+
+
+
+
+
