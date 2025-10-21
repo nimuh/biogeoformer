@@ -1,4 +1,4 @@
-# cycformer
+# BioGeoFormer
 
 cycformer
 
