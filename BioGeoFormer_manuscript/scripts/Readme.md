@@ -61,7 +61,14 @@
 * 9.5: Script processing the KEGG DIAMOND output into a .csv file.
 * 9.6: Script to parse the KEGG orthology database from KEGG BRITE. Prior to running this script, download the ko0001 file from (https://www.kegg.jp/kegg-bin/get_htext?ko00001).
 * 9.7: Script assigning gene names to KO IDs.
-* 9.8: Mapping 
+* 9.8: Mapping biogeochemical pathways to KEGG file. Primarily using gene names assigned in script 9.7.
+* 9.9: Processing DIAMOND output for BGFdb, into a .csv file.
+* 9.10: Processing HMM output for BGFdb, into a .csv file.
+* 9.11: Formatting MAG data to be run by BioGeoFormer. Shortening sequences to more manageably work with the file, however not so short that they are included as complete proteins by BGF (context window 1024 tokens).
+* 9.12: Splitting MAG data to parallelize BGF runs. 
+* 9.13: BGF inference of MAG data. These scripts were run on Google Colab with an A100 GPU.
+* 9.14: Script to compare annotation methods with one another, and plotting an Upset plot to visualize the comparison.
+* 9.15: Script making a bubble plot to compare annotation counts for each pathway by each method. Additionally plotting a bar plot of only BGF annotations and appending it to the bubble plot.
 
 
 
