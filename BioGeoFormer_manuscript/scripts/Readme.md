@@ -40,7 +40,20 @@
 
 ## Step_6_training_scaling_running_BGF
 * 6.1:
-* 6.2: 
+* 6.2: Scripts to carry out temperature scaling on all model splits post-training. Each script uses an asymmetric loss function to scale the softmax function under a range of weights. These scripts were run on an A100 GPU on Google Colab.
+* 6.3: Scripts used to run BioGeoFormer against test sets. These scripts were run on an A100 GPU on Google Colab.
+
+## Step_7_filtered_test_set
+* 7.1: Script leveraging DIAMOND output to create the 'filtered-test' set, where sequences that are higher than a set percent identity threshold are removed. This is used to better compare methods and their ability to identify remote homology with higher stringency.
+* 7.2: Script leveraging DIAMOND output to increase the number of sequences in the 'filtered-test' set. This script takes sequences from the 'anti_split' dataset which is comprised of sequences dropped by CD-HIT during clustering.
+
+## Step_8_evaluating_models
+* 8.1: Performance metric evaluations and comparison of methods using the metrics F1, Precision, Recall, Accuracy, Matthews Correlation Coefficient. Plotting for each model split and for each method.
+* 8.2: Script analyzing the performance of each model-split and their precision across similar and dissimilar proteins. Predictions are binned by softmax output and and plotted against precision per bin. Other visualizations are output such as the area under the curve (AUC) for these plots and a box plot comparin precision above a high-confidence threshold.
+
+## Step_9_MAG_application
+* In order to run this step, you must download the deduplicated metagenome-assembled genomes (MAGs) from 
+* 9.1: calling 
 
 
 
