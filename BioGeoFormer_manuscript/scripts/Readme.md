@@ -2,7 +2,7 @@
 
 ## Step_1_BioGeoFormer_db
 
-*in order to run this step you must have the databases downloaded: MCycDB, NCycDB, SCycDB, and PCycDB. Once downloaded, place each in the BioGeoFormer folder within this repository. 
+* in order to run this step you must have the databases downloaded: MCycDB, NCycDB, SCycDB, and PCycDB. Once downloaded, place each in the BioGeoFormer folder within this repository. 
 
 1.1-1.4: scripts that create the .csv files of the metadata and database, for each respective database -- MCycDB (1.1), NCycDB (1.2), PCycDB (1.3), and SCycDB (1.4). 
 1.5-1.6: scripts that group genes based on their respective biogeochemical pathways. A given ID may be assigned to one or more biogeochemical pathways at this point. 
