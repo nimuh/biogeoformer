@@ -52,8 +52,11 @@
 * 8.2: Script analyzing the performance of each model-split and their precision across similar and dissimilar proteins. Predictions are binned by softmax output and and plotted against precision per bin. Other visualizations are output such as the area under the curve (AUC) for these plots and a box plot comparin precision above a high-confidence threshold.
 
 ## Step_9_MAG_application
-* In order to run this step, you must download the deduplicated metagenome-assembled genomes (MAGs) from 
-* 9.1: calling 
+* In order to run this step, you must download the deduplicated metagenome-assembled genomes (MAGs) from Han et al., 2023 (https://identifiers.org/ncbi/bioproject:PRJNA950938)
+  
+* 9.1: calling open reading frames (ORFs) for MAGs using Prodigal. These commands were run on an HPC.
+* 9.2: DIAMOND run annotating MAG ORFs using the KEGG database. Requires a local KEGG database to run these commands.
+* 9.3: 
 
 
 
