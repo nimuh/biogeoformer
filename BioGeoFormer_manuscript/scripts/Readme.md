@@ -23,7 +23,14 @@
 
 ## Step_3_train_test_val_cluster_performance_diamond
 
-* 3.1: 
+* 3.1: Folder containing scripts to run DIAMOND commands, including making diamond databases for each pathway's training splits. Then running diamond on validation and test sets to determine percent identity between train/test/val sets. Scripts were run on an HPC.  
+* 3.2: Plotting the similarity and dissimilarity between training, testing, and validation sets. 
+
+## Step_4_hmm_runs
+* 4.1: Scripts for running FAMSA to perform multiple sequence alignments for each pathway's training splits. Scripts were run on an HPC.
+* 4.2: Building HMM profiles for each pathway's MSA alignments. Scripts were run on an HPC.
+* 4.3: Running HMMs against the pathway's splits for the validation, test, and anti_split (for the filtered-test) sets. Scripts were run on an HPC.
+* 4.4: Script to process the HMM runs on the validation datasets, outputting 
 
 
 
