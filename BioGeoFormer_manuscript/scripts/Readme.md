@@ -1,6 +1,6 @@
-Readme for scripts in BGF
+# Readme for scripts in BGF
 
-Step_1_BioGeoFormer_db
+## Step_1_BioGeoFormer_db
 
 -in order to run this step you must have the databases downloaded: MCycDB, NCycDB, SCycDB, and PCycDB. Once downloaded, place each in the BioGeoFormer folder within this repository. 
 
@@ -10,7 +10,7 @@ Step_1_BioGeoFormer_db
 1.10: Creating a fasta file of BioGeoFormer_db
 
 
-Step_2_clustering_train_test_val_BGF
+## Step_2_clustering_train_test_val_BGF
 
 2.1: Script to split BGF_db into fasta files by pathway (each file contains only sequences falling within a given pathway). These files are then to be used for clustering. 
 2.2: Folder containing clustering scripts running CD-HIT to cluster each pathway from 100% sequence identity down to 20% identity. Also includes clustering scripts to reconcile each clustering split to improve coverage. The output of these scripts are not included due to space constraints but will be shared upon request. Running these commands will likely require HPC access. 
@@ -21,7 +21,7 @@ Step_2_clustering_train_test_val_BGF
 2.9: Writing fasta files that are split by biogeochemical pathway (e.g., one pathway per file) for validation, train, test datasets. 
 2.10: Pulling sequences that were omitted by CD-HIT to be witheld and added to the 'filered-test' set, to benchmark the methods against stringently filtered sequence identities. 
 
-Step_3_train_test_val_cluster_performance_diamond
+## Step_3_train_test_val_cluster_performance_diamond
 
 3.1: 
 
