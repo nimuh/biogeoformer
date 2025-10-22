@@ -55,8 +55,13 @@
 * In order to run this step, you must download the deduplicated metagenome-assembled genomes (MAGs) from Han et al., 2023 (https://identifiers.org/ncbi/bioproject:PRJNA950938)
   
 * 9.1: calling open reading frames (ORFs) for MAGs using Prodigal. These commands were run on an HPC.
-* 9.2: DIAMOND run annotating MAG ORFs using the KEGG database. Requires a local KEGG database to run these commands.
-* 9.3: 
+* 9.2: DIAMOND run annotating MAG ORFs using the KEGG database. Requires a local KEGG database to run these commands. These commands were run on an HPC. 
+* 9.3: DIAMOND run annotating MAG ORFs using the BGFdb database. These commands were run on an HPC.
+* 9.4: HMM run annotating MAG ORFs against the HMMs constructed from the BGFdb database. These commands were run on an HPC.
+* 9.5: Script processing the KEGG DIAMOND output into a .csv file.
+* 9.6: Script to parse the KEGG orthology database from KEGG BRITE. Prior to running this script, download the ko0001 file from (https://www.kegg.jp/kegg-bin/get_htext?ko00001).
+* 9.7: Script assigning gene names to KO IDs.
+* 9.8: Mapping 
 
 
 
