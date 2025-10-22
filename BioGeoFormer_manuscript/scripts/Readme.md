@@ -30,7 +30,17 @@
 * 4.1: Scripts for running FAMSA to perform multiple sequence alignments for each pathway's training splits. Scripts were run on an HPC.
 * 4.2: Building HMM profiles for each pathway's MSA alignments. Scripts were run on an HPC.
 * 4.3: Running HMMs against the pathway's splits for the validation, test, and anti_split (for the filtered-test) sets. Scripts were run on an HPC.
-* 4.4: Script to process the HMM runs on the validation datasets, outputting 
+* 4.4-4.6: Scripts to process the HMM runs on the validation, test, and anti_split datasets, transforming output into a .csv file for each identity split.
+
+## Step_5_diamond_runs
+* 5.1: Scripts for making a DIAMOND database for each training split. Scripts were run on an HPC 
+* 5.2: Scripts for running DIAMOND databases against test and validation splits. Scripts were run on an HPC.
+* 5.3: Scripts for running DIAMOND databases against anti_split data. Scripts were run on an HPC.
+* 5.4-5.5: Scripts to process the DIAMOND output against the test, validation and anti_split datasets, transforming output into a .csv file for each identity split.
+
+## Step_6_training_scaling_running_BGF
+* 6.1:
+* 6.2: 
 
 
 
