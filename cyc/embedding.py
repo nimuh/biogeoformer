@@ -28,7 +28,7 @@ def tsne(sim):
     data_file_path = data_path + f'/selected_test_{sim}.csv'
     tokenizer = EsmTokenizer.from_pretrained('facebook/esm2_t6_8M_UR50D')
     
-    with open(f'cycformer/data/cycle_maps/cyc_label_id_map_{sim}.pickle', 'rb') as f:
+    with open(f'biogeoformer/data/cycle_maps/cyc_label_id_map_{sim}.pickle', 'rb') as f:
         mapper = pickle.load(f)
 
     protein_data = ProteinDataset(
@@ -41,7 +41,7 @@ def tsne(sim):
     )
 
     dataloader = torch.utils.data.DataLoader(protein_data, batch_size=1, shuffle=True)
-    pathways_map = pd.read_csv('cycformer/pathways_df.csv')
+    pathways_map = pd.read_csv('biogeoformer/pathways_df.csv')
     pathways_dict = dict(zip(pathways_map['biogeo_cycle'], pathways_map['long_name']))
     embeds = torch.zeros((len(dataloader), 320))
     labels = []
@@ -104,7 +104,7 @@ def tsne(sim):
 
     """
     # Save the color mapping to a file for consistency across runs
-    color_map_file = f'cycformer/data/color_map.pkl'
+    color_map_file = f'biogeoformer/data/color_map.pkl'
     os.makedirs(os.path.dirname(color_map_file), exist_ok=True)
     
     # If a color map already exists, use it and update with any new labels
