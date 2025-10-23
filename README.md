@@ -23,6 +23,9 @@ run the `setup.py` script by entering the following command
 pip install -e .
 ```
 
+### Formatting input data
+Input data must be a `.fasta` file format with an identifiable sequence ID, followed by a biological sequence sequence in *amino acid format*. Files must end with `.fasta`, and not `.faa` in order for BioGeoFormer to correctly identify the input. 
+
 
 ### Inference 
 * point to biogeoformer/cyc/inference.py
