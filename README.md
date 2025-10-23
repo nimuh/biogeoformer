@@ -1,9 +1,9 @@
 <img width="4000" height="4618" alt="Untitled_Artwork" src="https://github.com/user-attachments/assets/0261ae9e-15ed-4840-9ba8-fbe69810800f" />
 
-BioGeoFormer is a deep learning framework designed to predict and classify microbial proteins involved in key biogeochemical cycles — including methane, sulfur, nitrogen, and phosphorus transformations.
+BioGeoFormer is a protein language model designed to predict and classify microbial proteins involved in key biogeochemical cycles — including methane, sulfur, nitrogen, and phosphorus transformations.
 Built on the ESM-2 transformer architecture, fine-tuned on curated metabolic pathway databases (MCycDB, NCycDB, PCycDB, SCycDB), and a calibrated confidence function, BioGeoFormer extends sequence-function inference beyond traditional homology-based tools. 
 
-Built on four databases, BioGeoFormer leverages 610 unique gene families to cover 37 metabolic pathways. It represents an excellent complementary method for metagenome and genome mining, to uncover hypothetical gene function related to biogeochemical cycling. 'BioGeoFormer' is a blanket term for the 8 fine-tuned models defined by their clustered identity splits, with training, validation, and test n% dissimilar at 10% intervals from 20% to 90%. While the nuance is described in our publication, we found that the 70% split model is the most effective at precisely identifying remote homologues, and recommend its use in most circumstances. 
+Built on four databases, BioGeoFormer leverages 610 unique gene families to cover 37 metabolic pathways. It represents an excellent complementary method for metagenome and genome mining, to uncover hypothetical gene function related to biogeochemical cycling. 'BioGeoFormer' is a blanket term for the 8 fine-tuned models defined by their clustered identity splits, with training, validation, and test n% dissimilar at 10% intervals from 20% to 90%. While the nuance is described in our preprint, we found that the 70% split model is the most effective at precisely identifying remote homologues, and recommend its use in most circumstances. 
 
 ### To download BioGeoFormer
 
