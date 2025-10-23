@@ -1,1 +1,1 @@
-![Untitled_Artwork](https://github.com/user-attachments/assets/2e467b79-6b82-4881-82a9-55c3bd6a916d)
+<img width="4000" height="4618" alt="Untitled_Artwork" src="https://github.com/user-attachments/assets/0261ae9e-15ed-4840-9ba8-fbe69810800f" />
