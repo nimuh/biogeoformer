@@ -18,7 +18,7 @@ direct to the repository folder and make sure that you are in 'biogeoformer' onl
 ```bash
 cd /path/to/biogeoformer/folder
 ```
-run the setup.py script by entering the following command
+run the `setup.py` script by entering the following command
 ```bash
 pip install -e .
 ```
