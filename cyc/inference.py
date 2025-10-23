@@ -10,6 +10,18 @@ def main():
     """
     Command line interface for performing inference on protein sequences in a FASTA file
     """
+
+#ascii text taken from patorjk, doom font
+    print(r"""
+______ _       _____           ______                             
+| ___ (_)     |  __ \          |  ___|                            
+| |_/ /_  ___ | |  \/ ___  ___ | |_ ___  _ __ _ __ ___   ___ _ __ 
+| ___ \ |/ _ \| | __ / _ \/ _ \|  _/ _ \| '__| '_ ` _ \ / _ \ '__|
+| |_/ / | (_) | |_\ \  __/ (_) | || (_) | |  | | | | | |  __/ |   
+\____/|_|\___/ \____/\___|\___/\_| \___/|_|  |_| |_| |_|\___|_|                                                              
+                                                                  
+    """)
+    
     parser = argparse.ArgumentParser(description='Predict protein classes from FASTA sequences')
     parser.add_argument('--fasta_file', type=str, required=True,
                       help='Path to input FASTA file')
