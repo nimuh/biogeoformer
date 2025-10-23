@@ -22,7 +22,7 @@ def load_model(sim, device="cuda:0" if torch.cuda.is_available() else "cpu"):
     Returns:
         model: Loaded ESM model on specified device
     """
-    model_path = f'cycformer/models/final_models/cyc_{sim}'
+    model_path = f'biogeoformer/models/final_models/cyc_{sim}'
     print(f'\nLoading model -> {model_path} for identity at {sim}')
     model = EsmForSequenceClassification.from_pretrained(model_path)
     model.to(device)
@@ -47,7 +47,7 @@ def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.
 
     # Load the model
     model = load_model(sim, device)
-    temperature = torch.load(f'cycformer/models/final_temps/cyc{sim}_temp.pt')
+    temperature = torch.load(f'biogeoformer/models/final_temps/cyc{sim}_temp.pt')
     model.eval()
     
     # Convert FASTA to dataset and create dataloader
@@ -107,7 +107,7 @@ def predict_fasta_ensemble(sim, fasta_file, mapper, annot_file, device="cuda:0" 
     # load all the cycle maps for each model
     cycle_id_maps = []
     for sim in sims:
-        f = open(f'cycformer/data/cycle_maps/cyc_label_id_map_{sim}.pickle', 'rb')
+        f = open(f'biogeoformer/data/cycle_maps/cyc_label_id_map_{sim}.pickle', 'rb')
         cycle_id_maps.append(pickle.load(f))
 
     # ensure each model is set for inference
