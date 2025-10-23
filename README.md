@@ -7,3 +7,9 @@
 * cd into the biogeoformer folder
 * run the commnand in terminal: 'pip install -e .'
 * 
+
+## Inference 
+* point to biogeoformer/cyc/inference.py
+* -- sim "specify model split here"
+* -- fasta_file "path/to/input/fasta/here"
+* -- annot_file "path/to/output/annotations/here"
