@@ -28,7 +28,13 @@ Input data must be a `.fasta` file format with an identifiable sequence ID, foll
 
 
 ### Inference 
-* point to biogeoformer/cyc/inference.py
-* -- sim "specify model split here"
-* -- fasta_file "path/to/input/fasta/here"
-* -- annot_file "path/to/output/annotations/here"
+To run inference on sequences (functionally annotate), run the attached command below while specifying the path to the `inference.py` script in the `cyc` folder within the BioGeoFormer directory. Then specify which model-split to use (e.g., `--sim 70`) and the path to the input fasta file using the --fasta_file command. Lastly specify the path of the output `.csv` file with the `--anot_file` command. 
+
+Example command: 
+
+```bash
+!python ./cyc/inference.py --sim 70 \
+--fasta_file ./path/to/input/fasta \
+--anot_file ./path/to/output/file
+```
+
