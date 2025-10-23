@@ -8,7 +8,15 @@ Built on four databases, BioGeoFormer leverages 610 unique gene families to cove
 ### To download BioGeoFormer
 
 ```bash
-git clone
+git clone https://github.com/nimuh/biogeoformer.git
+```
+
+```bash
+cd /path/to/biogeoformer/folder
+```
+
+```bash
+pip install -e .
 ```
 
 * git clone (link here)
