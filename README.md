@@ -9,6 +9,7 @@ While the tool does run on CPU-based infrastructure, we strongly recommend using
 
 ### To download BioGeoFormer
 
+git clone the repository to the location you intend to run the tool: 
 ```bash
 git clone https://github.com/nimuh/biogeoformer.git
 ```
