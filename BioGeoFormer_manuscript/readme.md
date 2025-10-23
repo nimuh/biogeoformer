@@ -11,11 +11,11 @@
 * train_test_val_fasta_bypathway: fasta files of train/test/validation datasets split by sequence identity and metabolic pathway for downstream analysis.
 * train_test_val_final: final processed training/testing/validation data sets. These are in .csv output (train, validation, test) and .fasta output (train_fasta, val_fasta, test_fasta).
 
-## BGF_run_val_test_anti_split: output of BGF on certain dataset splits 
+### BGF_run_val_test_anti_split: output of BGF on certain dataset splits 
 * anti_split: BGF inference on anti split datasets.
 * test: BGF inference on test dataset.
 
-## BioGeoFormer_db: constructed BioGeoFormer_db database (BioGeoFormer_db.csv, BioGeoFormer_db.fasta), and overview of the genes and pathways in the database (BioGeoFormer_db_overview.csv, BioGeoFormer_db_overview.docx)
+### BioGeoFormer_db: constructed BioGeoFormer_db database (BioGeoFormer_db.csv, BioGeoFormer_db.fasta), and overview of the genes and pathways in the database (BioGeoFormer_db_overview.csv, BioGeoFormer_db_overview.docx)
 
-## cold_seep_MAG_application: Folder for annotating metagenome-assembled genomes and comparing method performance
+### cold_seep_MAG_application: Folder for annotating metagenome-assembled genomes and comparing method performance
 * 
