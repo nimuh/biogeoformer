@@ -14,18 +14,15 @@ git clone the repository to the location you intend to run the tool:
 git clone https://github.com/nimuh/biogeoformer.git
 ```
 
+direct to the repository folder and make sure that you are in 'biogeoformer' only and not within any subdirectories
 ```bash
 cd /path/to/biogeoformer/folder
 ```
-
+run the setup.py script by entering the following command
 ```bash
 pip install -e .
 ```
 
-* git clone (link here)
-* cd into the biogeoformer folder
-* run the commnand in terminal: 'pip install -e .'
-* 
 
 ### Inference 
 * point to biogeoformer/cyc/inference.py
