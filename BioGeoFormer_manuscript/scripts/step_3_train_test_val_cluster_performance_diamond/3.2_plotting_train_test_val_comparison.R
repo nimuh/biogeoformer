@@ -117,6 +117,15 @@ library(ggplot2)
 
 
 
+val_df %>%
+  group_by(similarity) %>%
+  summarise(
+    median_of_medians = median(median_dissimilarity, na.rm = TRUE),
+    mean_of_medians   = mean(median_dissimilarity, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+
 
 ggplot(test_df, aes(x = factor(similarity), y = median_dissimilarity)) +
   geom_boxplot(fill = "lightblue", color = "black") +
