@@ -3,6 +3,9 @@ import argparse
 import torch
 import pickle
 from cyc import util, model
+import os
+from pathlib import Path
+
 
 
 def main():
@@ -37,11 +40,14 @@ ______ _       _____           ______
 
     args = parser.parse_args()
 
-    # Load label mapping
-    with open(f'~/biogeoformer/models/final_models/cyc_id_maps/cyc_label_id_map_{args.sim}.pickle', 'rb') as f:
+    
+    current_dir = Path.cwd()
+    relative_file = current_dir / f'biogeoformer/models/final_models/cyc_id_maps/cyc_label_id_map_{args.sim}.pickle'
+    absolute_resolved_path = relative_file.resolve()
+    
+    with open(absolute_resolved_path, 'rb') as f:
         mapper = pickle.load(f)
-        print(mapper)
-
+        
     # Run inference
     predictions = model.predict_fasta(
         sim=args.sim,

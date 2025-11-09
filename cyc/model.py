@@ -7,6 +7,8 @@ import torch
 from cyc.util import fasta_to_dataset
 import pickle
 from tqdm import tqdm
+from pathlib import Path
+
 
 
 
@@ -22,8 +24,11 @@ def load_model(sim, device="cuda:0" if torch.cuda.is_available() else "cpu"):
     Returns:
         model: Loaded ESM model on specified device
     """
-    model_path = f'~/biogeoformer/models/final_models/cyc_{sim}'
-    print(f'\nLoading model -> {model_path} for identity at {sim}')
+
+    current_dir = Path.cwd()
+    relative_file = current_dir / f'biogeoformer/models/final_models/cyc_{sim}'
+    model_path = relative_file.resolve()
+   
     model = EsmForSequenceClassification.from_pretrained(model_path)
     model.to(device)
     return model
@@ -47,7 +52,11 @@ def predict_fasta(sim, fasta_file, mapper, annot_file, device="cuda:0" if torch.
 
     # Load the model
     model = load_model(sim, device)
-    temperature = torch.load(f'~/biogeoformer/models/final_temps/cyc{sim}_temp.pt')
+
+    current_dir = Path.cwd()
+    relative_file = current_dir / f'biogeoformer/models/final_temps/cyc{sim}_temp.pt'
+    model_temp_path = relative_file.resolve()
+    temperature = torch.load(model_temp_path)
     model.eval()
     
     # Convert FASTA to dataset and create dataloader
