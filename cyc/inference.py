@@ -1,6 +1,5 @@
 
 import argparse
-from cyc import util, model
 import torch
 import pickle
 
