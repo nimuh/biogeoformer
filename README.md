@@ -33,8 +33,6 @@ To run inference on sequences (functionally annotate), run the attached command 
 Example command: 
 
 ```bash
-!python ./cyc/inference.py --sim 70 \
---fasta_file ./path/to/input/fasta \
---anot_file ./path/to/output/file
+bgf --sim 70 --fasta_file ./path/to/input/fasta --annot_file ./path/to/output/file
 ```
 
