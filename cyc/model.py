@@ -4,7 +4,7 @@
 
 from transformers import EsmForSequenceClassification
 import torch
-from util import fasta_to_dataset
+from cyc.util import fasta_to_dataset
 import pickle
 from tqdm import tqdm
 
