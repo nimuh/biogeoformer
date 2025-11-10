@@ -1,0 +1,2 @@
+[console_scripts]
+bgf = cyc.inference:main

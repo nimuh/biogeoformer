@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: cyc
+Version: 0.0.0
+Requires-Dist: transformers
+Requires-Dist: torch
+Requires-Dist: scikit-learn
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: torchaudio
+Requires-Dist: torchvision
+Requires-Dist: biopython

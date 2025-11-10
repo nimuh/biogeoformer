@@ -1,0 +1,9 @@
+*.csv
+*.fasta
+*.faa
+*.fna
+*.daa
+*.tblout
+*.m8
+*.rds
+*.tsv
