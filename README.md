@@ -7,6 +7,10 @@ Built on four databases, BioGeoFormer leverages 610 unique gene families to cove
 
 While the tool does run on CPU-based infrastructure, we strongly recommend using a GPU-based infrastructure to annotate sequences to ensure the fastest completion time, especially for large datasets. If you do not have one personally available to you or do not have access through your institution, Google Colab is a user-friendly option to run a notebook with a GPU. 
 
+### Current version
+
+Version 1.0.0
+
 ### To download BioGeoFormer
 
 git clone the repository to the location you intend to run the tool: 
@@ -35,4 +39,8 @@ Example command:
 ```bash
 bgf --sim 70 --fasta_file ./path/to/input/fasta --annot_file ./path/to/output/file
 ```
+
+### License
+BioGeoFormer is under the MIT license.
+
 
