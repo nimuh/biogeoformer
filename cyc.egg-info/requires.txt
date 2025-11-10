@@ -1,0 +1,8 @@
+transformers
+torch
+scikit-learn
+numpy
+pandas
+torchaudio
+torchvision
+biopython
