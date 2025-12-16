@@ -40,6 +40,11 @@ Example command:
 bgf --sim 70 --fasta_file ./path/to/input/fasta --annot_file ./path/to/output/file
 ```
 
+### Contact
+Nima Azbijari: azbijarn@oregonstate.edu
+
+Jacob Wynne: jacobwynne@ucsb.edu
+
 ### License
 BioGeoFormer is under the MIT license.
 
