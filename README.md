@@ -39,6 +39,8 @@ Example command:
 ```bash
 bgf --sim 70 --fasta_file ./path/to/input/fasta --annot_file ./path/to/output/file
 ```
+### Preprint: 
+https://www.biorxiv.org/content/10.64898/2025.12.17.695047v1
 
 ### Contact
 Nima Azbijari: azbijarn@oregonstate.edu
