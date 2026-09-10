@@ -11,34 +11,30 @@ While the tool does run on CPU-based infrastructure, we strongly recommend using
 
 Version 1.0.0
 
-### To download BioGeoFormer
+### Using HuggingFace
+```python
+# Example: use BGF that was trained/evaluated on 10% GraphPart split
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-git clone the repository to the location you intend to run the tool: 
-```bash
-git clone https://github.com/nimuh/biogeoformer.git
+model_ckpt = "nazbijari/bgf-i10"
+model = AutoModelForSequenceClassification.from_pretrained(model_ckpt, trust_remote_code=True, device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained(model_ckpt, trust_remote_code=True)
+encoding = tokenizer("MKTLLLTLLVVTIVCLDLGYSLKCYQHGKVVTCHRD", return_tensors="pt")
+out = model(**encoding)
 ```
+### Models available through HuggingFace
+| Model | Split |
+| --- | --- |
+| `nazbijari/bgf-i10` | GraphPart 10% |
+| `nazbijari/bgf-i20` | GraphPart 20% | 
+| `nazbijari/bgf-i40` | GraphPart 40% | 
+| `nazbijari/bgf-i50` | GraphPart 50% |
+| `nazbijari/bgf-i60` | GraphPart 60% | 
+| `nazbijari/bgf-i70` | GraphPart 70% |
+| `nazbijari/bgf-i80` | GraphPart 80% |
+| `nazbijari/bgf-i90` | GraphPart 90% | 
 
-direct to the repository folder and make sure that you are in 'biogeoformer' only and not within any subdirectories
-```bash
-cd /path/to/biogeoformer/folder
-```
-run the `setup.py` script by entering the following command
-```bash
-pip install -e .
-```
 
-### Formatting input data
-Input data must be a `.fasta` file format with an identifiable sequence ID, followed by a biological sequence sequence in *amino acid format*. Files must end with `.fasta`, and not `.faa` in order for BioGeoFormer to correctly identify the input. 
-
-
-### Inference 
-To run inference on sequences (functionally annotate), run the attached command below while specifying the path to the `inference.py` script in the `cyc` folder within the BioGeoFormer directory. Then specify which model-split to use (e.g., `--sim 70`) and the path to the input fasta file using the --fasta_file command. Lastly specify the path of the output `.csv` file with the `--anot_file` command. 
-
-Example command: 
-
-```bash
-bgf --sim 70 --fasta_file ./path/to/input/fasta --annot_file ./path/to/output/file
-```
 ### Preprint: 
 https://www.biorxiv.org/content/10.64898/2025.12.17.695047v1
 
