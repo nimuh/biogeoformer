@@ -21,6 +21,8 @@ model = AutoModelForSequenceClassification.from_pretrained(model_ckpt, trust_rem
 tokenizer = AutoTokenizer.from_pretrained(model_ckpt, trust_remote_code=True)
 encoding = tokenizer("MKTLLLTLLVVTIVCLDLGYSLKCYQHGKVVTCHRD", return_tensors="pt")
 out = model(**encoding)
+
+print(model.config.id2label[out.logits.argmax(-1).item()]) # to get predicted cycle
 ```
 ### Models available through HuggingFace
 | Model | Split |
