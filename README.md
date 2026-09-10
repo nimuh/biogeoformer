@@ -28,7 +28,8 @@ print(model.config.id2label[out.logits.argmax(-1).item()]) # to get predicted cy
 | Model | Split |
 | --- | --- |
 | `nazbijari/bgf-i10` | GraphPart 10% |
-| `nazbijari/bgf-i20` | GraphPart 20% | 
+| `nazbijari/bgf-i20` | GraphPart 20% |
+| `nazbijari/bgf-i30` | GraphPart 30% |
 | `nazbijari/bgf-i40` | GraphPart 40% | 
 | `nazbijari/bgf-i50` | GraphPart 50% |
 | `nazbijari/bgf-i60` | GraphPart 60% | 
