@@ -25,17 +25,17 @@ out = model(**encoding)
 print(model.config.id2label[out.logits.argmax(-1).item()]) # to get predicted cycle
 ```
 ### Models available through HuggingFace
-| Model | Split |
-| --- | --- |
-| `nazbijari/bgf-i10` | GraphPart 10% |
-| `nazbijari/bgf-i20` | GraphPart 20% |
-| `nazbijari/bgf-i30` | GraphPart 30% |
-| `nazbijari/bgf-i40` | GraphPart 40% | 
-| `nazbijari/bgf-i50` | GraphPart 50% |
-| `nazbijari/bgf-i60` | GraphPart 60% | 
-| `nazbijari/bgf-i70` | GraphPart 70% |
-| `nazbijari/bgf-i80` | GraphPart 80% |
-| `nazbijari/bgf-i90` | GraphPart 90% | 
+| Model | Split | Link |
+| --- | --- | --- |
+| `nazbijari/bgf-i10` | GraphPart 10% | https://huggingface.co/nazbijari/bgf-i10 |
+| `nazbijari/bgf-i20` | GraphPart 20% | https://huggingface.co/nazbijari/bgf-i20 |
+| `nazbijari/bgf-i30` | GraphPart 30% | https://huggingface.co/nazbijari/bgf-i30 |
+| `nazbijari/bgf-i40` | GraphPart 40% | https://huggingface.co/nazbijari/bgf-i40 |
+| `nazbijari/bgf-i50` | GraphPart 50% | https://huggingface.co/nazbijari/bgf-i50 |
+| `nazbijari/bgf-i60` | GraphPart 60% | https://huggingface.co/nazbijari/bgf-i60 |
+| `nazbijari/bgf-i70` | GraphPart 70% | https://huggingface.co/nazbijari/bgf-i70 |
+| `nazbijari/bgf-i80` | GraphPart 80% | https://huggingface.co/nazbijari/bgf-i80 |
+| `nazbijari/bgf-i90` | GraphPart 90% | https://huggingface.co/nazbijari/bgf-i90 |
 
 
 ### Preprint: 
